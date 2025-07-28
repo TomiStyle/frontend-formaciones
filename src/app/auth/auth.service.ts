@@ -9,16 +9,23 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
 
   login(dni: string, password: string) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}users/login`, { id: dni, password })
+    return this.http.post<{ token: string, user: any }>(`${this.apiUrl}users/login`, { id: dni, password })
       .pipe(
         tap(response => {
+          // Almacenamos el token del usuario y sus datos
           localStorage.setItem('token', response.token);
+          localStorage.setItem('user', JSON.stringify(response.user));
         })
       );
   }
 
+  getUser() {
+    return JSON.parse(localStorage.getItem('user') || '{}');
+  }
+
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
   getToken() {
