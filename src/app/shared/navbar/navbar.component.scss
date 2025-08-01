@@ -3,6 +3,16 @@ $azul-oscuro: #115293;
 $rojo: #d32f2f;
 $rojo-oscuro: #a31515;
 
+.logo{
+  display: block;
+  height: 54px;
+  width: 80px;
+  background-image: url('/assets/img/logo_peq.webp');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .toolbar {
   display: flex;
   justify-content: space-between;

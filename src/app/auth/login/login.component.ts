@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,7 +14,7 @@ import { AuthService } from '../auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit{
   loginForm: FormGroup;
   error = '';
 
@@ -38,6 +38,14 @@ export class LoginComponent {
           this.error = err.error?.error || 'Error al hacer Login';
         }
       });
+    }
+  }
+
+  // Para que el DNI obtenga el foco al cargar la página
+  ngAfterViewInit() {
+    const dniInput = document.getElementById('dniField') as HTMLInputElement;
+    if (dniInput) {
+      dniInput.focus();
     }
   }
 }

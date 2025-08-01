@@ -1,11 +1,12 @@
 <mat-toolbar class="toolbar custom-toolbar">
   <span class="user-info" (click)="goHome()" style="cursor:pointer;">
-    {{ user.name }} {{ user.surname }}
+    <span class="logo" aria-label="Volver al inicio" role="img"></span>
   </span>
   <span class="spacer"></span>
   <div class="menu-buttons" [class.open]="menuOpen">
     <button mat-button class="menu-btn" (click)="nuevaFormacion()">Nueva Formación</button>
     <button mat-button class="menu-btn" (click)="editarPerfil()">Editar perfil</button>
+    <!-- Solo mostraremos el botón de Gestión de Usuarios si el usuario logueado es Administrador -->
     <button
       *ngIf="user?.role === 1"
       mat-button

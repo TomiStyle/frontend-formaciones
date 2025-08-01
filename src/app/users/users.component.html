@@ -1,0 +1,145 @@
+<app-navbar [user]="user"></app-navbar>
+<div class="usuarios-content">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Gestión de Usuarios</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Barra de acciones -->
+      <div class="actions-bar">
+        <button mat-raised-button color="primary" (click)="toggleCreateUserForm()">
+          <mat-icon>{{ showCreateUserForm ? 'close' : 'person_add' }}</mat-icon>
+          {{ showCreateUserForm ? 'Cerrar formulario' : 'Nuevo usuario' }}
+        </button>
+      </div>
+
+      <!-- Formulario de creación de usuario -->
+      <div *ngIf="showCreateUserForm" class="create-user-form">
+        <mat-card>
+          <mat-card-title>Crear nuevo usuario</mat-card-title>
+          <mat-card-content>
+            <form #userForm="ngForm" (ngSubmit)="createUser()">
+              <mat-form-field>
+                <mat-label>DNI</mat-label>
+                <input matInput name="id" [(ngModel)]="newUser.id" required>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Nombre</mat-label>
+                <input matInput name="name" [(ngModel)]="newUser.name" required>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Apellidos</mat-label>
+                <input matInput name="surname" [(ngModel)]="newUser.surname" required>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Contraseña</mat-label>
+                <input matInput name="password" [(ngModel)]="newUser.password" type="password" required>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Rol</mat-label>
+                <mat-select name="role" [(ngModel)]="newUser.role" required>
+                  <mat-option [value]="1">Administrador</mat-option>
+                  <mat-option [value]="2">Usuario</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div class="form-actions">
+                <button mat-raised-button color="primary" type="submit" [disabled]="userForm.invalid">Crear</button>
+                <button mat-button type="button" (click)="cancelCreateUser()">Cancelar</button>
+              </div>
+            </form>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Tabla de usuarios -->
+      <div class="table-responsive">
+        <table mat-table [dataSource]="users" class="users-table">
+          <!-- Columna DNI -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>DNI</th>
+            <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+          </ng-container>
+
+          <!-- Columna Nombre -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+          </ng-container>
+
+          <!-- Columna Apellidos -->
+          <ng-container matColumnDef="surname">
+            <th mat-header-cell *matHeaderCellDef>Apellidos</th>
+            <td mat-cell *matCellDef="let user">{{ user.surname }}</td>
+          </ng-container>
+
+          <!-- Columna Rol -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Rol</th>
+            <td mat-cell *matCellDef="let user">{{ getRoleName(user.role) }}</td>
+          </ng-container>
+
+          <!-- Columna Acciones -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let user">
+              <button mat-icon-button color="primary" (click)="editUser(user)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteUser(user.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Modal de edición de usuario -->
+<div *ngIf="showEditUserModal" class="modal-overlay" (click)="cancelEditUser()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Editar Usuario</mat-card-title>
+        <button mat-icon-button (click)="cancelEditUser()" class="close-button">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <form #editForm="ngForm" (ngSubmit)="updateUser()">
+          <mat-form-field>
+            <mat-label>DNI</mat-label>
+            <input matInput [(ngModel)]="editUserData.id" name="id" disabled>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Nombre</mat-label>
+            <input matInput [(ngModel)]="editUserData.name" name="name" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Apellidos</mat-label>
+            <input matInput [(ngModel)]="editUserData.surname" name="surname" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Rol</mat-label>
+            <mat-select [(ngModel)]="editUserData.role" name="role" required>
+              <mat-option [value]="1">Administrador</mat-option>
+              <mat-option [value]="2">Usuario</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="form-actions">
+            <button mat-raised-button color="primary" type="submit" [disabled]="editForm.invalid">
+              Guardar
+            </button>
+            <button mat-button type="button" (click)="cancelEditUser()">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

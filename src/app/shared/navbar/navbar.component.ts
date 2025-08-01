@@ -32,12 +32,12 @@ export class NavbarComponent {
   }
 
   editarPerfil() {
-    this.router.navigate(['/perfil']);
+    this.router.navigate(['/profile']);
     this.menuOpen = false;
   }
 
   gestionUsuarios() {
-    this.router.navigate(['/usuarios']);
+    this.router.navigate(['/users']);
     this.menuOpen = false;
   }
 

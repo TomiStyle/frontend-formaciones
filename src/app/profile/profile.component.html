@@ -1,0 +1,40 @@
+<app-navbar [user]="user"></app-navbar>
+<div class="profile-content">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Editar perfil</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form #profileForm="ngForm" (ngSubmit)="updateProfile()">
+        <mat-form-field>
+          <mat-label>Nombre</mat-label>
+          <input matInput name="name" [(ngModel)]="form.name" required>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Apellidos</mat-label>
+          <input matInput name="surname" [(ngModel)]="form.surname" required>
+        </mat-form-field>
+        
+        <div class="password-section">
+          <h3>Cambiar contraseña (opcional)</h3>
+          <mat-form-field>
+            <mat-label>Contraseña actual</mat-label>
+            <input matInput name="oldPassword" [(ngModel)]="form.oldPassword" type="password">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Nueva contraseña</mat-label>
+            <input matInput name="newPassword" [(ngModel)]="form.newPassword" type="password">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Repetir contraseña</mat-label>
+            <input matInput name="repeatPassword" [(ngModel)]="form.repeatPassword" type="password">
+          </mat-form-field>
+        </div>
+        
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit">Guardar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -3,11 +3,28 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', 'Roboto', Arial, sans-serif;
-  background: #f5f7fa;
+  background-repeat: no-repeat;
+  background-position: center center;
+  // background: #f5f7fa;
 }
 
 body {
   // min-height: 100vh;
   // min-width: 100vw;
   overflow-x: hidden;
+  background-image: url('/assets/img/logos.webp');
+}
+
+@media (max-width: 600px) {
+  body {
+    background-position: center 50px;
+    background-image: url('/assets/img/logos_600.webp');
+  }
+}
+
+@media (max-width: 400px) {
+  body {
+    background-position: center 50px;
+    background-image: url('/assets/img/logos_300.webp');
+  }
 }
