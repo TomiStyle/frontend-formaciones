@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../shared/navbar/navbar.component'; // Ajusta la ruta si es necesario
+import { Component } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { AuthService } from '../auth/auth.service';
+import { NavbarComponent } from '../shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, MatCardModule, NavbarComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
   user: any;

@@ -1,0 +1,51 @@
+<app-navbar [user]="user"></app-navbar>
+
+<div class="formation-content">
+    <mat-card>
+        <mat-card-header>
+            <mat-card-title>Nueva formación</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <form #formationForm="ngForm" (ngSubmit)="submit()">
+                <mat-form-field>
+                    <mat-label>Título</mat-label>
+                    <input matInput name="title" [(ngModel)]="form.title" required>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Fecha</mat-label>
+                    <input matInput [matDatepicker]="picker" placeholder="dd/MM/yyyy" name="date"
+                        [(ngModel)]="form.date" [readonly]="true" (click)="picker.open()"
+                        (keydown)="$event.preventDefault()" (paste)="$event.preventDefault()" required>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker startView="month" [touchUi]="true"></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field>
+                    <mat-label>Número de columnas</mat-label>
+                    <input matInput type="number" name="num_columns" [(ngModel)]="form.num_columns" min="1" step="1"
+                        required>
+                </mat-form-field>
+
+                <div class="file-field">
+                    <label for="excelInput" class="file-label" [class.disabled]="uploading">
+                        <mat-icon>upload_file</mat-icon>
+                        <span>{{ file?.name || 'Seleccionar archivo Excel (.xlsx/.xls)' }}</span>
+                    </label>
+                    <input id="excelInput" type="file" accept=".xlsx,.xls" (change)="onFileSelected($event)"
+                        [disabled]="uploading">
+                    <p class="hint">
+                        El Excel debe contener las columnas: name, surname (en ese orden o como cabeceras).
+                    </p>
+                </div>
+
+                <div class="form-actions">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="uploading">
+                        {{ uploading ? 'Procesando...' : 'Crear formación' }}
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,5 +1,12 @@
 <app-navbar [user]="user"></app-navbar>
 <div class="home-content">
-  <h2>Bienvenido, {{ user.name }} {{ user.surname }}</h2>
-  <!-- Más contenido aquí -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Gestión de formaciones</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <h2>Bienvenido, {{ user.name }} {{ user.surname }}</h2>
+      <!-- Más contenido aquí -->
+    </mat-card-content>
+  </mat-card>
 </div>

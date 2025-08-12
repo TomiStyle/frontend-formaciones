@@ -1,23 +1,28 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { Injectable, inject } from '@angular/core';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  // Cogemos la ult de la API del archivo de entorno, que dependerá de la forma de arranque de la aplicación
+  // Cogemos la url de la API del archivo de entorno, que dependerá de la forma de arranque de la aplicación
   private apiUrl = environment.apiUrl;
 
   login(dni: string, password: string) {
-    return this.http.post<{ token: string, user: any }>(`${this.apiUrl}users/login`, { id: dni, password })
-    .pipe(
-      tap(response => {
-        // Almacenamos el token del usuario y sus datos
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+    // console.log(this.apiUrl);
+    return this.http
+      .post<{ token: string; user: any }>(`${this.apiUrl}users/login`, {
+        id: dni,
+        password,
       })
-    );
+      .pipe(
+        tap((response) => {
+          // Almacenamos el token del usuario y sus datos
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+        })
+      );
   }
 
   getUser() {

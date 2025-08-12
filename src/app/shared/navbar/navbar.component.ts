@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 
@@ -10,16 +10,13 @@ import { AuthService } from '../../auth/auth.service';
   standalone: true,
   imports: [CommonModule, MatToolbarModule, MatButtonModule],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
   @Input() user: any;
   menuOpen = false;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService
-  ) {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   goHome() {
     this.router.navigate(['/']);
@@ -27,7 +24,7 @@ export class NavbarComponent {
   }
 
   nuevaFormacion() {
-    this.router.navigate(['/formaciones/nueva']);
+    this.router.navigate(['/formations/new']);
     this.menuOpen = false;
   }
 

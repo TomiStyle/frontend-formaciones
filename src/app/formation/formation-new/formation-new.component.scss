@@ -1,11 +1,11 @@
-.profile-content {
+.formation-content {
   padding: 2rem;
   min-height: calc(100vh - 56px);
   box-sizing: border-box;
 }
 
 mat-card {
-  max-width: 500px;
+  max-width: 600px;
   margin: 0 auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -28,27 +28,47 @@ mat-form-field {
   width: 100%;
 }
 
-.password-section {
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e0e0e0;
+.file-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 
-  h3 {
-    margin: 0 0 1rem 0;
+  input[type="file"] {
+    display: none;
+  }
+
+  .file-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.75rem 1rem;
+    border: 1px dashed #90caf9;
+    border-radius: 8px;
+    color: #1976d2;
+    background: #e3f2fd;
+
+    &.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .hint {
+    margin: 0;
     color: #666;
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: 0.85rem;
   }
 }
 
 .form-actions {
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 768px) {
-  .profile-content {
+  .formation-content {
     padding: 0.5rem;
   }
 
