@@ -125,13 +125,46 @@ button {
   }
 }
 
-/* Responsividad */
+/* Overlay de carga a pantalla completa */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  pointer-events: all; /* bloqueamos interacción con el fondo */
+}
+
+.loading-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  animation: spin 1.2s linear infinite;
+}
+
+.loading-text {
+  font-size: 1.1rem;
+  color: #1a237e;
+  font-weight: 600;
+}
+
+/* Animación de giro */
+@keyframes spin {
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
 @media (max-width: 600px) {
   .login-container {
     padding: 1.5rem 1rem;
     max-width: 95vw;
   }
-  
+
   h2 {
     font-size: 1.5rem;
   }
@@ -141,15 +174,15 @@ button {
   .login-container {
     padding: 1.2rem 0.8rem;
   }
-  
+
   .form-group input {
     padding: 1rem 0.8rem 0.5rem 0.8rem;
   }
-  
+
   .form-group label {
     left: 0.8rem;
   }
-  
+
   .form-group input:focus + label,
   .form-group input:not(:placeholder-shown) + label {
     left: 0.8rem;
