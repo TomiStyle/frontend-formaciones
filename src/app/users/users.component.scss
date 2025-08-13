@@ -1,6 +1,7 @@
 .usuarios-content {
   padding: 2rem;
   min-height: calc(100vh - 56px);
+  min-height: calc(100dvh - 56px); /* Preferible en móviles */
   box-sizing: border-box;
 }
 

@@ -1,30 +1,63 @@
-html, body {
+/* Reset útil para evitar desbordes por padding/border */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Evitamos zoom/auto-scaling de texto en iOS/Android */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  font-family: "Inter", "Roboto", Arial, sans-serif;
   background-repeat: no-repeat;
   background-position: center center;
-  // background: #f5f7fa;
+  overflow-x: hidden; /* refuerzo contra desbordes horizontales */
 }
 
+/* Evitamos problemas de 100vh en móviles: usa 100dvh con fallback */
 body {
-  // min-height: 100vh;
-  // min-width: 100vw;
-  overflow-x: hidden;
-  background-image: url('/assets/img/logos.webp');
+  min-height: 100vh; /* Fallback */
+  min-height: 100dvh; /* Móviles modernos: respeta barras dinámicas */
+  background-image: url("/assets/img/logos.webp");
 }
 
-@media (max-width: 600px) {
+/* (Opcional) Respetamos de notch/safe areas en iOS */
+@supports (padding: max(0px)) {
   body {
-    background-position: center 50px;
-    background-image: url('/assets/img/logos_600.webp');
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
   }
 }
 
-@media (max-width: 400px) {
+/* Evitamos que imágenes/SVG provoquen overflow */
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
   body {
     background-position: center 50px;
-    background-image: url('/assets/img/logos_300.webp');
+    background-image: url("/assets/img/logos_600.webp");
+  }
+}
+
+@media (max-width: 450px) {
+  body {
+    background-position: center 50px;
+    background-image: url("/assets/img/logos_300.webp");
   }
 }
