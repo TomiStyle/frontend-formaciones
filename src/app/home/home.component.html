@@ -1,12 +1,40 @@
 <app-navbar [user]="user"></app-navbar>
+
 <div class="home-content">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Gestión de formaciones</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <h2>Bienvenido, {{ user.name }} {{ user.surname }}</h2>
-      <!-- Más contenido aquí -->
-    </mat-card-content>
-  </mat-card>
+  <div class="welcome">
+    <h2>Bienvenido, {{ user?.name }} {{ user?.surname }}</h2>
+  </div>
+
+  <div class="cards-grid">
+    <!-- Tarjeta para crear nueva formación -->
+    <mat-card class="card new-card" (click)="goToNew()" tabindex="0" role="button" aria-label="Nueva formación">
+      <div class="new-card-content">
+        <mat-icon>add</mat-icon>
+        <span>Nueva formación</span>
+      </div>
+    </mat-card>
+
+    <!-- Tarjetas de formaciones -->
+    <mat-card class="card" *ngFor="let f of formations">
+      <mat-card-content>
+        <div class="title">{{ f.title }}</div>
+        <div class="meta">Fecha: {{ formatDate(f.date) }}</div>
+        <div class="meta">Nº de columnas: {{ f.num_columns }}</div>
+        <div class="meta">Total de personas: {{ f.total_people }}</div>
+      </mat-card-content>
+
+      <!-- Acciones para la tarjeta -->
+      <mat-card-actions class="card-actions">
+        <button mat-icon-button [disabled]="deletingIds.has(f.id)" (click)="onDeleteFormation(f, $event)"
+          aria-label="Eliminar formación" title="Eliminar formación">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="feedback" *ngIf="loading || errorMsg">
+    <span *ngIf="loading">Cargando formaciones...</span>
+    <span *ngIf="!loading && errorMsg">{{ errorMsg }}</span>
+  </div>
 </div>

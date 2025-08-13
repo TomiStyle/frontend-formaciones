@@ -1,4 +1,3 @@
-// src/app/formation/formation.service.ts
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -14,12 +13,11 @@ export class FormationService {
     return {
       headers: new HttpHeaders({
         Authorization: `Bearer ${token}`,
-        // Importante no fijar "Content-Type" manualmente en multipart/form-data
       }),
     };
   }
 
-  // Crear formación (subida Excel)
+  // Crear formación (subida desde Excel)
   createFormation(formData: FormData): Observable<any> {
     return this.http.post(
       `${this.apiUrl}formations`,
@@ -28,10 +26,18 @@ export class FormationService {
     );
   }
 
-  // Listar formaciones
+  // Listar formaciones (el backend ya devuelve solo activas)
   listFormations(): Observable<{ formations: any[] }> {
     return this.http.get<{ formations: any[] }>(
       `${this.apiUrl}formations`,
+      this.getAuthHeaders()
+    );
+  }
+
+  // Borrado lógico de formación
+  deleteFormation(id: string): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}formations/${id}`,
       this.getAuthHeaders()
     );
   }

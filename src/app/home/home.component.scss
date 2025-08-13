@@ -4,18 +4,99 @@
   box-sizing: border-box;
 }
 
-mat-card {
-  max-width: 500px;
-  margin: 0 auto;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  background-color: rgba(245, 245, 245, 0.95);
+.welcome {
+  margin-bottom: 1rem;
+
+  h2 {
+    margin: 0;
+    font-weight: 600;
+    color: #0d47a1;
+    // Para dar efecto neón al texto de bienvenida y asegurarnos que se vea
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff,
+      0 0 40px #fff, 0 0 50px #fff, 0 0 70px #fff, 0 0 100px #fff;
+  }
 }
 
-mat-card-title {
-  color: #1976d2;
-  font-weight: 600;
-  padding: 0.5rem;
+// Las tarjetas se irán adaptando al tamaño de pantalla y se ordenarán como grid, preparadas para formato móvil
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(325px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  cursor: default;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  border-radius: 10px;
+  background: rgba(245, 245, 245, 0.95);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(25, 118, 210, 0.35);
+  }
+
+  mat-card-content {
+    padding: 1rem 1.2rem;
+  }
+
+  .title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #0d47a1;
+    margin-bottom: 0.35rem;
+  }
+
+  .meta {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.4;
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.25rem 0.5rem 0.6rem 0.5rem;
+  }
+
+  // Atenuar el botón cuando esté deshabilitado
+  .delete-btn[disabled] {
+    opacity: 0.6;
+  }
+}
+
+/* Tarjeta "Nueva formación" */
+.new-card {
+  background: #e3f2fd;
+  color: #0d47a1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+
+  .new-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    mat-icon {
+      font-size: 42px;
+      width: 42px;
+      height: 42px;
+    }
+
+    span {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+  }
+}
+
+.feedback {
+  margin-top: 1rem;
+  color: #666;
 }
 
 @media (max-width: 768px) {
