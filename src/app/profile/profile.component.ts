@@ -29,7 +29,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatInputModule,
     MatSelectModule,
     NavbarComponent,
-    MatSnackBarModule
+    MatSnackBarModule,
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']

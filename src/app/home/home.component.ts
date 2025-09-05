@@ -1,17 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-
 import { AuthService } from '../auth/auth.service';
 import { FormationService } from '../formation/formation.service';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
 import { NavbarComponent } from '../shared/navbar/navbar.component';
+import { LoadingOverlayComponent } from '../shared/loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +23,7 @@ import { NavbarComponent } from '../shared/navbar/navbar.component';
     MatDialogModule,
     MatSnackBarModule,
     NavbarComponent,
+    LoadingOverlayComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -75,6 +75,20 @@ export class HomeComponent implements OnInit {
   // Navegamos a la ruta de Nueva Formación
   goToNew(): void {
     this.router.navigate(['/formations/new']);
+  }
+
+  // // Navegamos a la vista de grid de la formación
+  // goToFormationGrid(f: any, event?: Event): void {
+  //   event?.stopPropagation();
+  //   if (!f?.id) return;
+  //   this.router.navigate(['/formations', f.id, 'formationGrid']);
+  // }
+
+  // Navegamos a la vista de formación en formato listado por columnas
+  goToFormationListColumn(f: any, event?: Event): void {
+    event?.stopPropagation();
+    if (!f?.id) return;
+    this.router.navigate(['/formations', f.id, 'formationList']);
   }
 
   // Eliminamos una formación usando MatDialog

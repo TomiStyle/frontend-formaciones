@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { FormationService } from '../formation.service';
+import { LoadingOverlayComponent } from '../../shared/loading-overlay/loading-overlay.component';
 
 import {
   DateAdapter,
@@ -63,6 +64,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
     MatDatepickerModule,
     MatNativeDateModule,
     NavbarComponent,
+    LoadingOverlayComponent,
   ],
   templateUrl: './formation-new.component.html',
   styleUrls: ['./formation-new.component.scss'],
@@ -74,6 +76,7 @@ export const APP_DATE_FORMATS: MatDateFormats = {
 })
 export class FormationNewComponent {
   user: any;
+  loading = false;
 
   form: {
     title: string;
@@ -97,6 +100,7 @@ export class FormationNewComponent {
     this.user = this.authService.getUser();
   }
 
+  // Comprobamos el archivo a subir
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] || null;
@@ -124,6 +128,7 @@ export class FormationNewComponent {
       return;
     }
 
+    // Tamaño máximo de subida
     const maxMB = 5;
     if (file.size > maxMB * 1024 * 1024) {
       this.snackBar.open(`El archivo no puede superar ${maxMB} MB`, 'Cerrar', {
@@ -207,6 +212,7 @@ export class FormationNewComponent {
   submit() {
     if (!this.validateForm() || !this.file || !this.form.date) return;
 
+    this.loading = true;
     const formData = new FormData();
     formData.append('title', this.form.title.trim());
     formData.append('date', this.formatDateForApi(this.form.date)); // Transformamos el formato de la fecha
@@ -218,6 +224,7 @@ export class FormationNewComponent {
     this.formationService.createFormation(formData).subscribe({
       next: (res: any) => {
         this.uploading = false;
+        this.loading = false;
         this.snackBar.open(
           res?.message || 'Formación creada correctamente',
           'Cerrar',
@@ -231,6 +238,7 @@ export class FormationNewComponent {
       },
       error: (err) => {
         this.uploading = false;
+        this.loading = false;
         let msg = 'Se ha producido un error al crear la formación';
         if (err?.error?.error) msg = err.error.error;
         else if (err?.error?.message) msg = err.error.message;

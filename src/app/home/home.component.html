@@ -1,4 +1,5 @@
 <app-navbar [user]="user"></app-navbar>
+<app-loading-overlay [show]="loading"></app-loading-overlay>
 
 <div class="home-content">
   <div class="welcome">
@@ -25,6 +26,15 @@
 
       <!-- Acciones para la tarjeta -->
       <mat-card-actions class="card-actions">
+        <!-- <button mat-icon-button color="primary" (click)="goToFormationGrid(f, $event)" aria-label="Formación visual" title="Formación visual">
+          <mat-icon>grid_on</mat-icon>
+        </button> -->
+        
+        <button mat-icon-button color="primary" (click)="goToFormationListColumn(f, $event)" aria-label="Lista por Columnas" title="Lista por Columnas">
+          <mat-icon>view_column</mat-icon>
+          <!-- <mat-icon>list</mat-icon> -->
+        </button>
+        
         <button mat-icon-button [disabled]="deletingIds.has(f.id)" (click)="onDeleteFormation(f, $event)"
           aria-label="Eliminar formación" title="Eliminar formación">
           <mat-icon>delete</mat-icon>
@@ -33,8 +43,8 @@
     </mat-card>
   </div>
 
-  <div class="feedback" *ngIf="loading || errorMsg">
+  <!-- <div class="feedback" *ngIf="loading || errorMsg">
     <span *ngIf="loading">Cargando formaciones...</span>
     <span *ngIf="!loading && errorMsg">{{ errorMsg }}</span>
-  </div>
+  </div> -->
 </div>

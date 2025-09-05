@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
+import { LoadingOverlayComponent } from '../../shared/loading-overlay/loading-overlay.component';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ import { AuthService } from '../auth.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    LoadingOverlayComponent,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -29,7 +31,7 @@ import { AuthService } from '../auth.service';
 export class LoginComponent implements AfterViewInit {
   loginForm: FormGroup;
   error = '';
-  isLoading = false;
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -43,16 +45,16 @@ export class LoginComponent implements AfterViewInit {
   }
 
   onSubmit() {
-    if (this.loginForm.valid && !this.isLoading) {
+    if (this.loginForm.valid && !this.loading) {
       this.error = '';
-      this.isLoading = true;
+      this.loading = true;
 
       const { dni, password } = this.loginForm.value;
       this.authService
         .login(dni, password)
         .pipe(
           finalize(() => {
-            this.isLoading = false;
+            this.loading = false;
           })
         )
         .subscribe({

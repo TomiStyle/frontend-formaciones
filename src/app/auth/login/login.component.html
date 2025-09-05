@@ -1,31 +1,27 @@
-<div class="login-background" [attr.aria-busy]="isLoading">
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div class="login-background" [attr.aria-busy]="loading">
   <div class="login-container">
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <h2>Gestión de Formaciones</h2>
 
       <div class="form-group">
         <input id="dniField" type="text" formControlName="dni" required autocomplete="username" placeholder=" "
-          [disabled]="isLoading" />
+          [disabled]="loading" />
         <label>DNI</label>
       </div>
 
       <div class="form-group">
         <input type="password" formControlName="password" required autocomplete="current-password" placeholder=" "
-          [disabled]="isLoading" />
+          [disabled]="loading" />
         <label>Contraseña</label>
       </div>
 
       <div *ngIf="error" class="error">{{ error }}</div>
 
-      <button type="submit" [disabled]="loginForm.invalid || isLoading">
-        {{ isLoading ? 'Entrando...' : 'Entrar' }}
+      <button type="submit" [disabled]="loginForm.invalid || loading">
+        {{ loading ? 'Entrando...' : 'Entrar' }}
       </button>
     </form>
-  </div>
-
-  <!-- Overlay de carga -->
-  <div class="loading-overlay" *ngIf="isLoading" aria-live="polite" aria-label="Cargando">
-    <img class="loading-logo" src="/assets/img/logos_300.webp" alt="" />
-    <div class="loading-text">Cargando...</div>
   </div>
 </div>
