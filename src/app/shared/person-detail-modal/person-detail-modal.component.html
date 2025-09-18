@@ -1,0 +1,110 @@
+<!-- Overlay visible solo si isOpen -->
+<div class="modal-overlay" *ngIf="isOpen">
+    <div class="modal-container">
+        <!-- Botón de cierre -->
+        <button class="modal-close-btn" type="button" (click)="onClose()">
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <!-- Contenido -->
+        <div class="modal-content">
+            <div class="person-header">
+                <div class="person-name">
+                    {{ person?.name }} {{ person?.surname }}
+                </div>
+                <div class="person-subinfo">
+                    <span>Escalafón:</span> <strong>{{ person?.scale }}</strong>
+                </div>
+            </div>
+
+            <div class="person-details" *ngIf="!changeMode">
+                <div class="detail-item">
+                    <span>Fila:</span> <strong>{{ person?.row }}</strong>
+                </div>
+                <div class="detail-item">
+                    <span>Columna:</span> <strong>{{ person?.column }}</strong>
+                </div>
+                <div class="detail-item with-change" *ngIf="person?.old_row">
+                    <span>Fila anterior:</span> <strong>{{ person?.old_row }}</strong>
+                </div>
+                <div class="detail-item with-change" *ngIf="person?.old_column">
+                    <span>Columna anterior:</span> <strong>{{ person?.old_column }}</strong>
+                </div>
+            </div>
+
+            <!-- Modo cambio de posición -->
+            <div class="change-position-container" *ngIf="changeMode">
+                <h4>Seleccionar posición para intercambiar</h4>
+
+                <div class="position-selectors">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Fila</mat-label>
+                        <mat-select [(ngModel)]="selectedRow">
+                            <mat-option *ngFor="let r of rowOptions" [value]="r">
+                                {{ r }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Columna</mat-label>
+                        <mat-select [(ngModel)]="selectedColumn">
+                            <mat-option *ngFor="let c of columnOptions" [value]="c">
+                                {{ c }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <!-- Vista de la persona en esa posición -->
+                <div class="preview-person" *ngIf="selectedRow && selectedColumn">
+                    <p><strong>Persona que cambiaría:</strong></p>
+                    <div class="target-person-info" *ngIf="targetPerson; else emptyPosition">
+                        <span>{{ targetPerson.name }} {{ targetPerson.surname }}</span>
+                        <small>(Fila {{ targetPerson.row }}, Columna {{ targetPerson.column }})</small>
+                        <div class="warning-same-person" *ngIf="targetPerson._id === person?._id">
+                            ⚠️ No puedes intercambiar una persona consigo misma
+                        </div>
+                    </div>
+                    <ng-template #emptyPosition>
+                        <span class="empty-position">⚠️ No hay ninguna persona en esta posición</span>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones cuando la persona está DENTRO de la formación -->
+        <div class="modal-actions" *ngIf="!changeMode && person?.row !== 0 && person?.column !== 0">
+            <button mat-raised-button color="warn" type="button" (click)="onRemovePerson()">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Sacar de la formación</span>
+            </button>
+
+            <button mat-raised-button color="primary" type="button" (click)="onChangePosition()">
+                <mat-icon>swap_horiz</mat-icon>
+                <span>Cambiar de posición</span>
+            </button>
+        </div>
+
+        <!-- Botón cuando la persona está FUERA de la formación -->
+        <div class="modal-actions" *ngIf="!changeMode && person?.row === 0 && person?.column === 0">
+            <button mat-raised-button color="accent" type="button" (click)="onAddPerson()">
+                <mat-icon>person_add</mat-icon>
+                <span>Meter en la formación</span>
+            </button>
+        </div>
+
+        <!-- Botones de cambio de posición -->
+        <div class="modal-actions" *ngIf="changeMode">
+            <button mat-stroked-button color="warn" type="button" (click)="onCancelChange()">
+                <mat-icon>close</mat-icon>
+                Cancelar
+            </button>
+            <button mat-raised-button color="primary" type="button" [disabled]="!canConfirmSwap"
+                (click)="onConfirmSwap()">
+                <mat-icon>check</mat-icon>
+                Confirmar intercambio
+            </button>
+        </div>
+    </div>
+</div>

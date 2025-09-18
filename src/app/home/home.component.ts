@@ -1,16 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 import { FormationService } from '../formation/formation.service';
 import { ConfirmDialogComponent } from '../shared/confirm-dialog/confirm-dialog.component';
-import { NavbarComponent } from '../shared/navbar/navbar.component';
 import { LoadingOverlayComponent } from '../shared/loading-overlay/loading-overlay.component';
+import { NavbarComponent } from '../shared/navbar/navbar.component';
 
 @Component({
   selector: 'app-home',
@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
         const arr = Array.isArray(res?.formations) ? res.formations : [];
         this.formations = arr;
       },
-      error: (err) => {
+      error: (err: any) => {
         this.loading = false;
         this.errorMsg = err?.error?.message || 'Error al cargar formaciones';
         this.snackBar.open(this.errorMsg, 'Cerrar', {
@@ -89,6 +89,12 @@ export class HomeComponent implements OnInit {
     event?.stopPropagation();
     if (!f?.id) return;
     this.router.navigate(['/formations', f.id, 'formationList']);
+  }
+
+  // Navegamos a la vista de formación en formato listado por filas
+  goToFormationListRow(formation: any, event: Event) {
+    event.stopPropagation();
+    this.router.navigate([`/formations/${formation.id}/formationListRow`]);
   }
 
   // Eliminamos una formación usando MatDialog

@@ -1,0 +1,99 @@
+<app-navbar [user]="user"></app-navbar>
+<app-loading-overlay [show]="loading"></app-loading-overlay>
+
+<div class="formation-content">
+
+  <!-- Bloque con datos de la formación -->
+  <div *ngIf="!loading && formation" class="formation-container">
+    <mat-card class="formation-header">
+      <mat-card-header>
+        <mat-card-title>{{ formation.title }}</mat-card-title>
+        <mat-card-subtitle>
+          Fecha: {{ formatDate(formation.date) }} |
+          Columnas: {{ formation.num_columns }} |
+          Total personas: {{ getTotalPeople() }}
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+          Volver
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Combo para seleccionar columnas -->
+    <div class="column-selector">
+      <mat-form-field appearance="outline">
+        <mat-label>Selecciona columna</mat-label>
+        <mat-select [(ngModel)]="selectedColumn">
+          <mat-option value="all">Todas</mat-option>
+          <!--Por defecto se marca esta opción, ya que de primeras saldrán todas las columnas visibles -->
+          <!-- Recorremos las columnas y montamos el combo -->
+          <mat-option *ngFor="let col of columns" [value]="col.columnNumber">
+            Columna {{ col.columnNumber }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Bloque para las tablas de las columnas -->
+    <div class="formation-list-tables">
+      <!-- Por cada columna montamos una tabla -->
+      <mat-card *ngFor="let column of getColumnsToShow()" class="column-table-card">
+        <div class="table-title">Columna {{ column.columnNumber }}</div>
+        <table class="people-table">
+          <thead>
+            <tr>
+              <th>Fila</th>
+              <th>Nombre</th>
+              <th>Apellidos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Añadimos una fila por cada persona asignada en la columna -->
+            <tr *ngFor="let person of column.people; trackBy: trackByPersonId" class="clickable-row"
+              (click)="openPersonModal(person)">
+              <td>{{ person.row }}</td>
+              <td>{{ person.name }}</td>
+              <td>{{ person.surname }}</td>
+            </tr>
+            <!-- Por si acaso, controlamos que la columna no tenga personas, no obstante no se debería dar -->
+            <tr *ngIf="column.people.length === 0">
+              <td colspan="3" class="empty-cell">
+                <mat-icon>person_off</mat-icon>
+                Sin personas asignadas
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Bloque de error -->
+  <div *ngIf="!loading && !formation" class="error-container">
+    <mat-card>
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon color="warn">error</mat-icon>
+          <h3>No se pudo cargar la formación</h3>
+          <p>
+            Verifica que el ID de la formación sea correcto y que tengas permisos para acceder.
+          </p>
+          <button mat-raised-button color="primary" (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+            Volver al listado
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<!-- Modal para mostrar la información de una persona al hacer clic -->
+<app-person-detail-modal [isOpen]="isPersonModalOpen" [person]="selectedPerson" [numRows]="maxRows"
+  [numColumns]="formation?.num_columns || 0" [allPeople]="allPeople" (closeModal)="closePersonModal()"
+  (confirmSwap)="handleConfirmSwap($event)" (removePerson)="handleRemovePerson($event)"
+  (addPerson)="handleAddPerson($event)">
+</app-person-detail-modal>

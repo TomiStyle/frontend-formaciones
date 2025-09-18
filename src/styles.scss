@@ -29,6 +29,11 @@ body {
   background-image: url("/assets/img/logos.webp");
 }
 
+// Para que los desplegables de Angular Material se vean por encima de los modales
+.cdk-overlay-container {
+  z-index: 11000 !important;
+}
+
 /* (Opcional) Respetamos de notch/safe areas en iOS */
 @supports (padding: max(0px)) {
   body {

@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { authGuard } from './auth/auth.guard';
 import { LoginComponent } from './auth/login/login.component';
 import { FormationNewComponent } from './formation/formation-new/formation-new.component';
+import { FormationViewListRowComponent } from './formation/formation-view-list-row/formation-view-list-row.component';
+import { FormationViewListComponent } from './formation/formation-view-list/formation-view-list.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UsersComponent } from './users/users.component';
@@ -16,5 +18,20 @@ export const routes: Routes = [
     path: 'formations/new',
     canActivate: [authGuard],
     component: FormationNewComponent,
+  },
+  // {
+  //   path: 'formations/:id/formationGrid',
+  //   canActivate: [authGuard],
+  //   component: FormationViewGridComponent,
+  // },
+  {
+    path: 'formations/:id/formationList',
+    canActivate: [authGuard],
+    component: FormationViewListComponent,
+  },
+  {
+    path: 'formations/:id/formationListRow',
+    canActivate: [authGuard],
+    component: FormationViewListRowComponent,
   },
 ];

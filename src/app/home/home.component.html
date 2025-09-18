@@ -29,12 +29,17 @@
         <!-- <button mat-icon-button color="primary" (click)="goToFormationGrid(f, $event)" aria-label="Formación visual" title="Formación visual">
           <mat-icon>grid_on</mat-icon>
         </button> -->
-        
-        <button mat-icon-button color="primary" (click)="goToFormationListColumn(f, $event)" aria-label="Lista por Columnas" title="Lista por Columnas">
-          <mat-icon>view_column</mat-icon>
-          <!-- <mat-icon>list</mat-icon> -->
+
+        <button mat-icon-button color="accent" (click)="goToFormationListRow(f, $event)" aria-label="Lista por Filas"
+          title="Lista por Filas">
+          <mat-icon>view_stream</mat-icon>
         </button>
-        
+
+        <button mat-icon-button color="primary" (click)="goToFormationListColumn(f, $event)"
+          aria-label="Lista por Columnas" title="Lista por Columnas">
+          <mat-icon>view_column</mat-icon>
+        </button>
+
         <button mat-icon-button [disabled]="deletingIds.has(f.id)" (click)="onDeleteFormation(f, $event)"
           aria-label="Eliminar formación" title="Eliminar formación">
           <mat-icon>delete</mat-icon>
