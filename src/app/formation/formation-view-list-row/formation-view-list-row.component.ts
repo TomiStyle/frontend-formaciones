@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import jsPDF from 'jspdf';
+import autoTable, { RowInput } from 'jspdf-autotable';
 import { AuthService } from '../../auth/auth.service';
 import { LoadingOverlayComponent } from '../../shared/loading-overlay/loading-overlay.component';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
@@ -288,5 +290,84 @@ export class FormationViewListRowComponent implements OnInit {
         this.showError('Error al reinsertar persona en la formación');
       },
     });
+  }
+
+  downloadPdfByRows() {
+    if (!this.rows || this.rows.length === 0 || !this.formation) {
+      return;
+    }
+
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    // Para que la posible fila 0 sea la última en mostrarse
+    const sortedRows = [...this.rows].sort((a, b) => {
+      if (a.rowNumber === 0) return 1;
+      if (b.rowNumber === 0) return -1;
+      return a.rowNumber - b.rowNumber;
+    });
+
+    sortedRows.forEach((rowData, index) => {
+      if (index > 0) {
+        doc.addPage();
+      }
+
+      const people = rowData.people || [];
+
+      // Cabecera de página: título de formación y fila
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      //Uso el operador de aserción no nula porque, aunque se comprueba más arriba, TypeScript me daba error porque el título de la formación podría venir nulo
+      doc.text(this.formation!.title || 'Formación', pageWidth / 2, 15, {
+        align: 'center',
+      });
+
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      const subtitle = `Fila ${rowData.rowNumber} - ${people.length} personas`;
+      doc.text(subtitle, pageWidth / 2, 22, { align: 'center' });
+
+      // Calculamos tamaño de fuente según número de personas
+      const maxUsableHeight = pageHeight - 30; // margen superior 30mm
+      const rowsCount = people.length > 0 ? people.length : 1;
+      const approxRowHeight = maxUsableHeight / rowsCount;
+
+      // Limitamos el tamaño de fuente entre 7 y 18 pt, según espacio
+      let fontSize = Math.min(18, Math.max(7, approxRowHeight * 0.4));
+
+      // Preparamos datos para autotable
+      const body: RowInput[] = people.map((p) => [
+        `${p.name || ''} ${p.surname || ''}`.trim(),
+      ]);
+
+      autoTable(doc, {
+        head: [['Nombre y apellidos']],
+        body,
+        startY: 30,
+        styles: {
+          fontSize,
+          cellPadding: 1.5,
+          valign: 'middle',
+        },
+        headStyles: {
+          fillColor: [230, 230, 230],
+          textColor: 0,
+          fontStyle: 'bold',
+          halign: 'center',
+        },
+        bodyStyles: {
+          halign: 'left',
+        },
+        margin: { left: 15, right: 15 },
+      });
+    });
+
+    doc.save(`${this.formation.title || 'formacion'}_filas.pdf`);
   }
 }

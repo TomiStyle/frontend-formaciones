@@ -153,6 +153,23 @@
   }
 }
 
+// Para alinear los botones de los informes a la derecha
+mat-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .spacer {
+    flex: 1;
+  }
+
+  button[mat-icon-button] {
+    mat-icon {
+      color: #1976d2; // Para que el icono de PDF y Excel se vean azules
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .formation-content {
     padding: 1rem;
