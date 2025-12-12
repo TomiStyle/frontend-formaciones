@@ -369,4 +369,98 @@ export class FormationViewListComponent implements OnInit {
       }
     }, 0);
   }
+
+  async downloadExcelByColumns() {
+    if (!this.columns || this.columns.length === 0 || !this.formation) return;
+
+    this.loading = true;
+
+    setTimeout(async () => {
+      try {
+        // Import dinámico para agrandar el bundle
+        const ExcelJS = (await import('exceljs')).default;
+
+        const wb = new ExcelJS.Workbook();
+        wb.creator = 'Gestión de Formaciones';
+
+        // Columna 0 al final
+        const sortedColumns = [...this.columns].sort((a, b) => {
+          if (a.columnNumber === 0) return 1;
+          if (b.columnNumber === 0) return -1;
+          return a.columnNumber - b.columnNumber;
+        });
+
+        for (const col of sortedColumns) {
+          const title = `Columna ${col.columnNumber}`;
+          const sheetName = this.safeSheetName(title);
+          const ws = wb.addWorksheet(sheetName);
+
+          // Anchos de las columna
+          ws.getColumn(1).width = 32; // A (nombre)
+          ws.getColumn(2).width = 53; // B (apellidos)
+
+          // Fila 1: título de la hoja
+          ws.getCell('A1').value = title;
+          ws.mergeCells('A1:B1');
+
+          const titleCell = ws.getCell('A1');
+          titleCell.font = { bold: true, size: 24 }; // Formato de las celdas de título
+          titleCell.alignment = { horizontal: 'center', vertical: 'middle' };
+          ws.getRow(1).height = 35; // Cambiamos la altura para que se vea bien el tamaño 24
+
+          // Datos desde fila 2: A = nombre, B = apellidos
+          let rowIndex = 2;
+          for (const p of col.people || []) {
+            const row = ws.getRow(rowIndex);
+            row.getCell(1).value = p.name ?? '';
+            row.getCell(2).value = p.surname ?? '';
+
+            // Tamaño 16 para datos
+            row.getCell(1).font = { size: 16 };
+            row.getCell(2).font = { size: 16 };
+
+            rowIndex++;
+          }
+        }
+
+        // Generamos buffer
+        const buffer = await wb.xlsx.writeBuffer();
+        const blob = new Blob([buffer], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        });
+
+        const fileName = `${this.safeFileName(
+          this.formation!.title || 'formacion'
+        )}_columnas.xlsx`;
+
+        // Descargamos
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.error('Error al generar Excel:', error);
+        this.showError('Error al generar el archivo Excel');
+      } finally {
+        this.loading = false;
+      }
+    }, 0);
+  }
+
+  // Limpiamos caracteres no válidos en nombres de hoja de Excel
+  private safeSheetName(name: string): string {
+    return (
+      name
+        .replace(/[:\\/?*\[\]]/g, ' ')
+        .trim()
+        .slice(0, 31) || 'Hoja'
+    );
+  }
+
+  //Limpiamos de posibles caracteres problemáticos en nombres de archivo
+  private safeFileName(name: string): string {
+    return name.replace(/[<>:"/\\|?*\x00-\x1F]/g, '_').trim() || 'formacion';
+  }
 }
