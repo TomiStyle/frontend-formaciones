@@ -1,23 +1,40 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './auth/auth.guard';
-import { LoginComponent } from './auth/login/login.component';
-import { FormationNewComponent } from './formation/formation-new/formation-new.component';
-import { FormationViewListRowComponent } from './formation/formation-view-list-row/formation-view-list-row.component';
-import { FormationViewListComponent } from './formation/formation-view-list/formation-view-list.component';
-import { HomeComponent } from './home/home.component';
-import { ProfileComponent } from './profile/profile.component';
-import { UsersComponent } from './users/users.component';
+
+// CARGAMOS LAS RUTAS CON LAZY LOADING PARA QUE EL main.js SEA MÁS LIVIANO
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  {
+    path: 'login',
+    loadComponent: () =>
+      import('./auth/login/login.component').then((m) => m.LoginComponent),
+  },
   // Aplicamos la protección para que un usuario esté logueado, si no, devolverá a la página de login
-  { path: '', canActivate: [authGuard], component: HomeComponent },
-  { path: 'users', canActivate: [authGuard], component: UsersComponent },
-  { path: 'profile', canActivate: [authGuard], component: ProfileComponent },
+  {
+    path: '',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./home/home.component').then((m) => m.HomeComponent),
+  },
+  {
+    path: 'users',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./users/users.component').then((m) => m.UsersComponent),
+  },
+  {
+    path: 'profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./profile/profile.component').then((m) => m.ProfileComponent),
+  },
   {
     path: 'formations/new',
     canActivate: [authGuard],
-    component: FormationNewComponent,
+    loadComponent: () =>
+      import('./formation/formation-new/formation-new.component').then(
+        (m) => m.FormationNewComponent
+      ),
   },
   // {
   //   path: 'formations/:id/formationGrid',
@@ -27,11 +44,17 @@ export const routes: Routes = [
   {
     path: 'formations/:id/formationList',
     canActivate: [authGuard],
-    component: FormationViewListComponent,
+    loadComponent: () =>
+      import(
+        './formation/formation-view-list/formation-view-list.component'
+      ).then((m) => m.FormationViewListComponent),
   },
   {
     path: 'formations/:id/formationListRow',
     canActivate: [authGuard],
-    component: FormationViewListRowComponent,
+    loadComponent: () =>
+      import(
+        './formation/formation-view-list-row/formation-view-list-row.component'
+      ).then((m) => m.FormationViewListRowComponent),
   },
 ];
